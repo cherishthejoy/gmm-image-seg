@@ -1,0 +1,69 @@
+You have a n-dim of vectors or just an array of scalar values.
+You distribute it along the axis, and you notice that there are 2 different bell curves.
+But Gaussian/Normal distributions have only 1 mean curve.
+
+You think, maybe this is a problem for Gaussian Mixture Model?
+
+The whole point of the model is to find whether the observation you have seen 
+belongs to either one or the other clusters/classes.
+
+Each cluster corresponds to a Gaussian distribution.
+
+It moves hard clustering -> soft clustering, where you think each data point
+can belong to each cluster with certain probability.
+
+Cluster shapes:
+
+- Mean 
+    The mean represents the central point in the feature space.
+- Covariance
+    The covariance matrix describes the shape, size and orientation
+    of the cluster or ellipse in some cases. Unlike simpler clustering methods
+    such as K-means which assume spherical clusters. The shape of the elliptical
+    cluster is directly related to the covariance matrix where the relationships 
+    between features define tilt, stretch and compression.
+
+
+
+Steps of calculation:
+
+- Expectation Maximization
+
+In statistics, EM algorithm iteratively finds the local maximum likelhood 
+or maximum a posteriori of parameters in statistical models in cases where 
+the equation cannot be solved directly.
+
+In EM algorithm we try to find the best values for 
+Mu (Mean), 
+Sigma (Covariance), 
+Pi (Mixing coefficient/Mixture weights)
+
+Initialization:
+
+Start with initial guesses for the Theta(Parameters) for each Gaussian distributions.
+
+Expectation step:
+
+For each data point calculate the responsibility/probability of it belonging to each
+Gaussian distribution (cluster)
+
+Maximization step:
+
+Update the parameters based on gamma
+
+
+
+Other information:
+
+- Log likelihood
+
+    The Covariance Matrix:
+        [Var(x) Cov(x, y)]
+        [Cov(x, y) Var(y)]
+        
+
+
+
+
+
+
