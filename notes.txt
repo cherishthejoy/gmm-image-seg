@@ -45,19 +45,19 @@ Initialization:
 Start with initial guesses for the Theta(Parameters) for each Gaussian distributions.
 
 Expectation step:
+    Calculate gamma (responsibility)
+    For each data point calculate the responsibility/probability of it belonging to each
+    Gaussian distribution (cluster)
+    Assign soft responsibility
 
-For each data point calculate the responsibility/probability of it belonging to each
-Gaussian distribution (cluster)
 
 Maximization step:
 
-Update the parameters based on gamma
+    Update the parameters based on gamma
 
 
 
 Other information:
-
-- Log likelihood
 
     The Covariance Matrix:
         [Var(x) Cov(x, y)]
@@ -65,12 +65,17 @@ Other information:
 
 - Reason we take log-likelhood instead of likelihood
 When we try to find total likelihood, we calculate the product of each data point.
-But when there are vector of means and covariance matrix you end up sum instead of 
-product.
-Also for the case of Gaussian you have to calculate exponential, whereas taking
-the derivative makes it linear calculation.
+Taking log likelihood here would simplify the product to sum. log(a * b) = log(a) + log(b).
+Also, after multiplying thousands of probabilities of points, we have risk of underflowing of tiny numbers.
+Log of numbers between 0 and 1 are negative numbers.
+So, taking the log of the likelihood is a convenience.
 
-And there's the floating point underflow, log prevents this. Not sure how I prove this.
+- The hidden variable problem:
+
+    There's this hidden variable (z) exists which has an intuition telling which data point belongs
+    to either one of the clusters. Instead pondering about this hidden value, we try to make sense of it 
+    with gamma (the responsibility).
+    In another words, gamma is our probabilistic guess of this hidden variable.
         
 
 
