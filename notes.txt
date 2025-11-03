@@ -29,9 +29,11 @@ Steps of calculation:
 
 - Expectation Maximization
 
-In statistics, EM algorithm iteratively finds the local maximum likelhood 
+In statistics, EM algorithm iteratively aims to find the local maximum likelhood 
 or maximum a posteriori of parameters in statistical models in cases where 
-the equation cannot be solved directly.
+the equation cannot be solved directly. 
+As you can already tell, the algorithm uses Maximum Likelihood Estimation (MLE) 
+to find the best possible values for given parameters.
 
 In EM algorithm we try to find the best values for 
 Mu (Mean), 
@@ -60,6 +62,15 @@ Other information:
     The Covariance Matrix:
         [Var(x) Cov(x, y)]
         [Cov(x, y) Var(y)]
+
+- Reason we take log-likelhood instead of likelihood
+When we try to find total likelihood, we calculate the product of each data point.
+But when there are vector of means and covariance matrix you end up sum instead of 
+product.
+Also for the case of Gaussian you have to calculate exponential, whereas taking
+the derivative makes it linear calculation.
+
+And there's the floating point underflow, log prevents this. Not sure how I prove this.
         
 
 
