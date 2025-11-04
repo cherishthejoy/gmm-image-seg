@@ -7,7 +7,6 @@ Gaussian Mixture Model utilizes the idea of "soft-assignment" opposed to k-means
 To explain the probability of a point or points belonging to that certain cluster, we use something like EM (Expectation Maximization). This is the core algorithm that is used in the model and I will try to best explain what this algorithm does.
 
 # Expectation-Maximization
-Нөхцөлт дундаж
 
 In statistics, EM algorithm iteratively aims to find the local maximum likelhood or maximum a posteriori of parameters in statistical models in cases where the equation cannot be solved directly. Typically, if we know all the parameters, we would take the derivates of the likelihood function with respect to all the unknown values.
 We could just digress from it by thinking, models like Gaussian Mixture have latent or hidden variables (z) that have influence on whether if a point belongs to a certain group or cluster. But as mentioned above, solving them is an obstacle. And EM algorithm helps us to thread over it. I will talk a bit about these latent variables further ahead.
@@ -15,6 +14,8 @@ We could just digress from it by thinking, models like Gaussian Mixture have lat
 EM consists of two steps in general. The E (Expectation) step and the M (Maximization) step.
 
 ## Expectation-step:
+
+```Нөхцөлт математик дундаж```
 
 In the initialization on the e-step, we assume that we don't know the parameter values. As the dimension increases in our gaussian distribution, the amount of parameters (theta) will increase responding it. The algorithm usually picks initial random guesses of these paramters. 
 
@@ -31,6 +32,8 @@ $$
 $$
 \pi = Weight
 $$ 
+
+Since we have only one dimension of data, we have a vector of variance, but it's possible to think a vector of 2 different 1x1 matrix of covariance.
 
 
 
@@ -103,4 +106,78 @@ $$
 
 The algorithm iteratively runs this until convergence or maximum number of iterations reached. Remember, convergence meaning, the log-likelihood plateaus.
 
-So if each point of data has a $\gamma$ value, meaning they have membership in each distribution.
+So, each point of data has a $\gamma$ value, meaning they have membership in each distribution.
+
+# Multivariate Normal Distribution
+
+We assume we have vector of more than one feature.
+
+
+$$
+\Chi \sim \mathcal{N}(\Mu,\Sigma)
+$$
+
+
+$$
+\begin{bmatrix}
+X_1
+\cr
+X_2
+\cr
+\vdots
+\cr
+X_n
+\end{bmatrix}
+\sim
+\mathcal{N}
+\left(
+\begin{bmatrix}
+\mu_{X_1}
+\cr
+\mu_{X_2}
+\cr
+\vdots
+\cr
+\mu_{X_n}
+\end{bmatrix},
+\begin{bmatrix}
+\sigma_{X_1}^2 & \sigma_{X_1, X_2} & \dots & \sigma_{X_1, X_n}
+\cr
+\sigma_{X_2, X_1} & \sigma_{X_2}^2 & & \vdots
+\cr
+\vdots & & \ddots
+\cr
+\sigma_{X_n, X_1} & \ldots & & \sigma_{X_n}^2
+\end{bmatrix}
+\right)
+$$
+
+One thing to take account when calculating probability density function for multivariate normals, $(2\pi)^d$
+
+1. The way we calculate normal distribution has changed a bit
+
+
+# Image Segmentation
+
+We will be using Scikit-learn's Gaussian Mixture Model to segment images.
+
+$$
+\mu_{RGB} = {\mu_{R}, \mu_{G}, \mu_{B}}
+$$
+
+$$
+\pi_i
+$$
+
+$$
+\Sigma_i = 
+\begin{bmatrix}
+\sigma^2_{R} & \sigma_{RG} & \sigma_{RB}
+\cr
+\sigma_{RG} & \sigma^2_{G} & \sigma_{GB}
+\cr
+\sigma_{RB} & \sigma_{GB} & \sigma^2_{B}
+\end{bmatrix}
+$$
+
+
