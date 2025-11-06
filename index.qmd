@@ -64,16 +64,44 @@ fig-format: pdf
 fig-cap-location: top
 tbl-cap-location: top
 bibliography: references.bib
-# csl: ieee.csl
+csl: ieee.csl
 citeproc: true
 link-citations: true
 ---
 
-# Hello, World!
+Энэхүү ажлаар өөр хэмжээст бүхий санамсаргүй утгууд дээр хэвийн тархалтыг ашиглан граафик гаргах, тэр дундаас гурван хэмжээст утга бүхий зурган өгөгдөл дээр Гауссын хольцийн моделийг ашиглан сэгмэнтлэн, хангалтгүй үр дүн үзүүлэх тохиолдлуудыг тодорхойлон дүгнэх болно. Мөн тухайн моделийн параметрүүд ямар утгуудад ямар тохиолдолд үр дүн өгөөжтэй байхыг тодорохойлох.
+
+Шаардлагатай багц болон сангууд
+
+Test cases are:
+
+1. Images with same color background
+2. How does covariance type behave under different conditions
+3. Gradient images
+
+`pip install numpy scikit-learn Pillow matplotlib`
+
+# Өгөгдөл
+
+Өгөгдлүүд нь 
+
+# Нэг хэмжээст ГХМ
+# Хоёр хэмжээст ГХМ
+# Гурван хэмжээст ГХМ
+# Image Segmentation
+
+Дүгнэлт
+Ашигласан материал
+
+
+
+What to say here
 
 ```{python}
 for i in range(2):
     print("Hello, World!")
 ```
 
-What to say here
+$$
+\mu_i = {\mu_{R}, \mu_{G}, \mu_{B}}
+$$
