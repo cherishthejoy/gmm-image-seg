@@ -1,0 +1,79 @@
+---
+jupyter: python3
+author: "Team"
+title: "Gaussian Mixture Model Image Segmentation"
+subtitle: ""
+date: "2025-11-06"
+date-format: "YYYY оны M-р сарын D"
+toc: true
+toc-depth: 3
+toc-title: Агуулга
+number-sections: true
+format:
+  pdf:
+    echo: true
+    pdf-engine: xelatex
+    papersize: a4paper
+    geometry:
+      - left=2cm
+      - right=2cm
+      - top=2cm
+      - bottom=3cm
+    include-in-header:
+      - text: |
+          \usepackage[english,mongolian]{babel}
+          \usepackage{fontspec}
+          % үндсэн текстийн шрифт
+          \setmainfont{Times New Roman}
+          % код хэсгийн шрифт
+          \setmonofont{DejaVu Sans Mono}
+          \AddToHook{env/Highlighting/begin}{\footnotesize}
+          % үндсэн гарчиг
+          \usepackage{titling}
+          \pretitle{\begin{center}\LARGE\bfseries}
+          \posttitle{\par\end{center}\vskip 1em}
+          % сэдвийн зүйлчлэл хэсгийн шрифт
+          \usepackage{titlesec}
+          \titleformat{\section}{\normalfont\Large\bfseries\selectfont}{\thesection}{1em}{}
+          \titleformat{\subsection}{\normalfont\large\bfseries\selectfont}{\thesubsection}{1em}{}
+          \titleformat{\subsubsection}{\normalfont\normalsize\bfseries\selectfont}{\thesubsubsection}{1em}{}
+          % сэдвийн жагсаалт доторх шрифт
+          \usepackage{tocloft}
+          \renewcommand{\cfttoctitlefont}{\Large\bfseries\fontspec{Times New Roman}}
+          \renewcommand{\cftaftertoctitle}{\vskip 1em}
+          \renewcommand{\cftsecfont}{\normalfont\selectfont}
+          \renewcommand{\cftsecpagefont}{\normalfont\selectfont}
+          \renewcommand{\cftsubsecfont}{\normalfont\selectfont}
+          \renewcommand{\cftsubsecpagefont}{\normalfont\selectfont}
+          \renewcommand{\contentsname}{Агуулга}
+    latex-max-runs: 3
+editor: source
+execute:
+  echo: false
+crossref: 
+  fig-title: Зураг
+  fig-prefix: Зураг
+  tbl-title: Хүснэгт
+  tbl-prefix: Хүснэгт
+fig-align: center
+fig-env: "figure"
+fig-height: 4
+fig-width: 6
+fig-pos: "!ht"
+fig-format: pdf
+fig-cap-location: top
+tbl-cap-location: top
+bibliography: references.bib
+# csl: ieee.csl
+citeproc: true
+link-citations: true
+---
+
+# Hello, World!
+
+```{python}
+for i in range(2):
+    print("Hello, World!")
+```
+
+What to say here

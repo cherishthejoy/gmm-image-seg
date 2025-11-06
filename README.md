@@ -1,4 +1,4 @@
-# gmm-image-seg
+# Gaussian Mixture Model
 
 Gaussian Mixture Model is a "probabilistic" model that assumes all the data points are generated from a mixture of a finite number of Gaussian distributions with "unknown" parameters.
 
@@ -110,7 +110,7 @@ So, each point of data has a $\gamma$ value, meaning they have membership in eac
 
 # Multivariate Normal Distribution
 
-We assume we have vector of more than one feature.
+We assume we have vector of more than one feature. 
 
 
 $$
@@ -152,21 +152,20 @@ X_n
 \right)
 $$
 
-One thing to take account when calculating probability density function for multivariate normals, $(2\pi)^d$
 
-1. The way we calculate normal distribution has changed a bit
+* The way we calculate normal distribution has changed a bit. We use multivariate normal distribution probability density function with a small tweak.
 
+
+$$
+f\mathrm{x}(x) = |2\pi\Sigma|^{-1/2}\exp\{-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x - \mu)\}
+$$
 
 # Image Segmentation
 
-We will be using Scikit-learn's Gaussian Mixture Model to segment images.
+We will be using Scikit-learn's Gaussian Mixture Model to segment images into different tones.
 
 $$
-\mu_{RGB} = {\mu_{R}, \mu_{G}, \mu_{B}}
-$$
-
-$$
-\pi_i
+\mu_i = {\mu_{R}, \mu_{G}, \mu_{B}}
 $$
 
 $$
@@ -180,4 +179,5 @@ $$
 \end{bmatrix}
 $$
 
+I think for this report we should try to minimize the different amount of reions in the picture. Set amount of object.
 
