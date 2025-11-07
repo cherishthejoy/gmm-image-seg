@@ -1,5 +1,18 @@
 # Gaussian Mixture Model
 
+### Clone and install the requirements
+
+venv uusgechvel dajgu bhaa....
+
+```
+pip install -r requirements.txt
+
+```
+
+May or not need to the install the "Quarto" extension unless you use other IDE or text editors.
+
+## Introduction
+
 Gaussian Mixture Model is a "probabilistic" model that assumes all the data points are generated from a mixture of a finite number of Gaussian distributions with "unknown" parameters.
 
 Gaussian Mixture Model utilizes the idea of "soft-assignment" opposed to k-means clustering "hard-assignment" where each data point could belong to several different clusters or gaussian distributions with their respective probabilities.
@@ -15,27 +28,26 @@ EM consists of two steps in general. The E (Expectation) step and the M (Maximiz
 
 ## Expectation-step:
 
-```Нөхцөлт математик дундаж```
+```Нөхцөлт математик дундаж``` i think???
 
 In the initialization on the e-step, we assume that we don't know the parameter values. As the dimension increases in our gaussian distribution, the amount of parameters (theta) will increase responding it. The algorithm usually picks initial random guesses of these paramters. 
 
 For one dimension feature and two gaussian distribution model, we have 5 parameters:
 
+
 $$
-\mu_1, \mu_2 = Mean
+\mu_1, \mu_2 = \text{Mean}
 $$
 
 $$
-\sigma^2_1, \sigma^2_2 = Variance
+\sigma^2_1, \sigma^2_2  = \text{Variance}
 $$
 
 $$
-\pi = Weight
-$$ 
+\pi = \text{Weight}
+$$  
 
 Since we have only one dimension of data, we have a vector of variance, but it's possible to think a vector of 2 different 1x1 matrix of covariance.
-
-
 
 ### Likelihood function
 
@@ -179,5 +191,7 @@ $$
 \end{bmatrix}
 $$
 
-I think for this report we should try to minimize the different amount of reions in the picture. Set amount of object.
+I think for this report we should try to minimize the different amount of regions in the image. Like set amount of object at the same time.
+
+
 

@@ -1,8 +1,9 @@
 ---
 jupyter: python3
-author: "Team"
 title: "Gaussian Mixture Model Image Segmentation"
 subtitle: ""
+abstract: Энэхүү ажлаар өөр хэмжээст бүхий санамсаргүй утгууд дээр хэвийн тархалтыг ашиглан граафик гаргах, тэр дундаас гурван хэмжээст утга бүхий зурган өгөгдөл дээр Гауссын хольцийн моделийг ашиглан сэгмэнтлэн, хангалтгүй үр дүн үзүүлэх тохиолдлуудыг тодорхойлон дүгнэх болно. Мөн тухайн моделийн параметрүүд ямар утгуудад ямар тохиолдолд үр дүн өгөөжтэй байхыг тодорохойлох.
+author: "Team"
 date: "2025-11-06"
 date-format: "YYYY оны M-р сарын D"
 toc: true
@@ -69,39 +70,312 @@ citeproc: true
 link-citations: true
 ---
 
-Энэхүү ажлаар өөр хэмжээст бүхий санамсаргүй утгууд дээр хэвийн тархалтыг ашиглан граафик гаргах, тэр дундаас гурван хэмжээст утга бүхий зурган өгөгдөл дээр Гауссын хольцийн моделийг ашиглан сэгмэнтлэн, хангалтгүй үр дүн үзүүлэх тохиолдлуудыг тодорхойлон дүгнэх болно. Мөн тухайн моделийн параметрүүд ямар утгуудад ямар тохиолдолд үр дүн өгөөжтэй байхыг тодорохойлох.
+# Шаардлагатай багцууд {-}
 
-Шаардлагатай багц болон сангууд
-
-Test cases are:
-
-1. Images with same color background
-2. How does covariance type behave under different conditions
-3. Gradient images
+Шаардлагатай багцуудыг дараах байдлаар урьдчилан суулгана.
 
 `pip install numpy scikit-learn Pillow matplotlib`
 
 # Өгөгдөл
 
-Өгөгдлүүд нь 
+Өгөгдлүүд нь бүгд зурган өгөгдөл байх бөгөөд "jpg", "jpeg", "png" гэсэн өргөтгэлтэй байна. Эндээс "png" өргөтгөлтэй зургууд нь ихэвчлэн альфа сувгын мэдээллийг агуулдаг учир зохих аргыг ашиглана. Зургуудыг хангалттай болон хангалтгүй үр дүнд хүрэх гэж 2 ангилах бөгөөд, GMM ашиглан хангалттай буюу segmentation хийхэд тохиромжтой, зураг дээрх обьектууд олон өнгөөс тогтсон, гэрлийн чанар муу гэх тодотголууд дээр суурилан хангалтгүй гэж тус тусад нь тодорхойлж болно. Нэг болон хоёр хэмжээст хэвийн тархалтуудын хувьд scikit-learn сангын synthetic өгөгдөл үүсгэх аргуудыг ашиглах болно.
 
 # Нэг хэмжээст ГХМ
-# Хоёр хэмжээст ГХМ
-# Гурван хэмжээст ГХМ
-# Image Segmentation
-
-Дүгнэлт
-Ашигласан материал
-
-
-
-What to say here
 
 ```{python}
-for i in range(2):
-    print("Hello, World!")
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+from sklearn.mixture import GaussianMixture as GMM
 ```
+
+Синтетик аргаар хоёр өөр төрлийн хэвийн тархалт бүхий өгөгдлүүдийг үүсгээд, тооцоолол хийх боломжтой хэлбэрт оруулна.
+
+$$
+\mu_1, \mu_2 = \text{Дундаж}
+$$
+$$
+\sigma^2_1, \sigma^2_2  = \text{Стандарт хазайлт}
+$$
+$$
+\pi = \text{Хольцийн жин}
+$$  
+
+Ихэвчлэн синтетиз өгөгдөл үүсгэх бол дээрх параметрүүдийг ашиглан тархалтуудыг тодорхойлно.
+```{python}
+rng = np.random.default_rng()
+x = np.concatenate((rng.normal(1, 2, 1000), rng.normal(9, 3, 1000)))
+f = x.reshape(-1, 1)
+```
+
+Гауссын хольцийн моделд зохих ковариансын матриксийн төрөл болон кластерийн тоог өгнө. Ковариансын матрицийн төрлүүдийг дараа нь дахин авч үзнэ.
+
+```{python}
+gmm = GMM(n_components=2, covariance_type='full')
+gmm.fit(f)
+x_axis = np.sort(x)
+```
+
+Постериор магадлалын томёонд орлуулга ("integrate?") хийн цэгэн утга бүрийн магадлалыг олно. Гамма нь тухайн ажиглагдсан цэгэн өгөдөл нь аль кластэрт хамаарах вэ гэдэг асуултад хариулт болж өгдөг.
+$$
+\gamma_i = \frac{\pi_1 \cdot \phi_2(x_i|\mu_2,\sigma^2_2)}{\pi_2 \cdot \phi_1(x_i|\mu_1,\sigma^2_1) + \pi_1 \cdot \phi_2(x_i|\mu_2,\sigma^2_2)}
+$$
+
+Бидний өгөгдлийн хувьд 2 хэвийн тархалттай кластер байгаа учир:
+
+$$
+\gamma_j = 1 - \gamma_i
+$$ байна.
+
+Сургасан моделоос тооцоолсон $\mu_1, \mu_2, \sigma_1, \sigma_2, \pi$ параметрүүдийн боломжит хамгийн их утгуудыг тооцоолон нягтын функцийн графикийг дүрслэнэ.
+$$
+\pi = \sum_{i = 1}^N(1-\gamma_i)/N
+$$
+$$
+\mu_1 = \frac{\sum_{i = 1}^N(1-\gamma_i)x_i}{\sum_{i = 1}^N(1-\gamma_i)}
+$$
+$$
+\mu_2 = \frac{\sum_{i = 1}^N\gamma_ix_i}{\sum_{i = 1}^N\gamma_i}
+$$
+$$
+\sigma_1 =
+\sqrt{
+\frac{\sum_{i = 1}^N(1-\gamma_i)(x_i - \mu_1)^2}{\sum_{i = 1}^N(1-\gamma_i)}
+}
+$$
+$$
+\sigma_2 =
+\sqrt{
+\frac{\sum_{i = 1}^N\gamma_i(x_i - \mu_2)^2}{\sum_{i = 1}^N\gamma_i}
+}$$
+
+```{python}
+#| label: fig-1d-pdf
+#| fig-cap: Синтетик өгөгдөлтэй хэвийн тархалтын нягтын функц
+
+weights = gmm.weights_
+means = gmm.means_
+covars = gmm.covariances_
+
+plt.hist(f, bins=100, histtype='bar', density=True, ec='white', alpha=1.0)
+plt.plot(x_axis, weights[0] * stats.norm.pdf(x_axis, means[0], np.sqrt(covars[0])).ravel(), c = 'red')
+plt.plot(x_axis, weights[1] * stats.norm.pdf(x_axis, means[1], np.sqrt(covars[1])).ravel(), c = 'green')
+
+plt.grid()
+plt.show()
+```
+
+# Хоёр хэмжээст ГХМ
+
+Хоёр хэмжээс хэвийн тархалтын санамсаргүй утгууд нь вектор байх ба өгөгдлийн хэмжээсийг дагаж параметрүүдийн хэмжээс ихэснэ.
+
+Өгөдлийг өмнөхтэй адил синтетикээр үүсгэх бөгөөд стандарт хазайлт нь коварианс матриц хэлбэртэй болно. Коварианс матриц нь эллипсийн хоёр хэмжээст огторгуйн тэнхлэг болон хэмжээс нөлөөлнө.
+
+Доорх код нь гурван өөр төрлийн эллипс хэлбэртэй энгийн тархалт бүхий өгөгдлийг үүсгэнэ.
+
+```{python}
+from matplotlib.colors import LogNorm
+import matplotlib.ticker as ticker
+
+n_samples = 300
+rng = np.random.default_rng()
+c1 = rng.standard_normal((n_samples, 2)) + np.array([20, 20])
+dot_two = np.array([[0.0, -0.7], [3.5, 0.7]])
+c2 = np.dot(rng.standard_normal((n_samples, 2)), dot_two)
+dot_three = np.array([[0.0, 0.5], [0.5, 0.7]])
+c3 = np.dot(rng.standard_normal((n_samples, 2)), dot_three) + np.array([-10, 30])
+X_train = np.vstack([c1, c2, c3])
+
+gmm = GMM(n_components=3, covariance_type="full").fit(X_train)
+```
+Гурван өөр төрлийн хэвийн тархалттай учир, кластерийн тоог '3' гэж өгнө.
+
+
+Хоёр хэмжээст огторгуйд нягтын функцийн шугаман загварын талбарыг байгуулж цэг болгоны сөрөг log-likelihood-ийг тооцоолно.
+
+$$
+\mathcal{L}(\theta|x_i) = \prod_{i=1}^N f(x_i|\theta)
+$$
+
+Likelihood-ийг тооцоолоход цэгэн утга болгоны тухайн утгыг үржүүлэх хэрэг гардаг учих log авснаар зөвхөн нийлбэрийг тооцохоор болгон хөнгөвчлөхөөс гадна компьютер тооцоолол хийхэд underflow үүсэхээс сэргийлдэг.
+
+$$
+\ell(\theta|x_i) = \log\left(\prod_{i=1}^N f(x_i|\theta)\right) = \sum_{i=1}^N \log f(x_i|\theta)
+$$
+
+Хоёр хэмжээст огторгуйд нягтын функцийг дүрслэх 2D огторгуйг үүсгэх.
+```{python}
+x = np.linspace(-40.0, 50.0, 200)
+y = np.linspace(-40.0, 50.0, 200)
+X, Y = np.meshgrid(x, y)
+XX = np.array([X.ravel(), Y.ravel()]).T
+Z = -gmm.score_samples(XX)
+Z = Z.reshape(X.shape)
+``` 
+
+
+Хоёр хэмжээст огторгуйд нягтын функцийн шугаман загварыг дүрслэх.
+```{python}
+#| label: fig-negative-log
+#| fig-cap: Хоёр хэмжээст хэвийн тархалтын сөрөг log-likelihood
+plt.style.use('dark_background')
+fmt = ticker.LogFormatterMathtext()
+fmt.create_dummy_axis()
+
+CS = plt.contour(X, Y, Z, norm=LogNorm(vmin=1.0, vmax=1000.0), 
+                levels=np.logspace(0, 3, 10),
+                colors='white')
+
+plt.clabel(CS, fmt=fmt, fontsize=5)
+
+plt.scatter(X_train[:, 0], X_train[:, 1], 0.8, color='white', marker="+")
+plt.gca().set_aspect('equal')
+plt.show()
+``` 
+
+
+# Гурван хэмжээст ГХМ болон Image Segmentation
+
+$$
+\begin{bmatrix}
+X_1
+\cr
+X_2
+\cr
+\vdots
+\cr
+X_n
+\end{bmatrix}
+\sim
+\mathcal{N}
+\left(
+\begin{bmatrix}
+\mu_{X_1}
+\cr
+\mu_{X_2}
+\cr
+\vdots
+\cr
+\mu_{X_n}
+\end{bmatrix},
+\begin{bmatrix}
+\sigma_{X_1}^2 & \sigma_{X_1, X_2} & \dots & \sigma_{X_1, X_n}
+\cr
+\sigma_{X_2, X_1} & \sigma_{X_2}^2 & & \vdots
+\cr
+\vdots & & \ddots
+\cr
+\sigma_{X_n, X_1} & \ldots & & \sigma_{X_n}^2
+\end{bmatrix}
+\right)
+$$
 
 $$
 \mu_i = {\mu_{R}, \mu_{G}, \mu_{B}}
 $$
+
+$$
+\Sigma_i = 
+\begin{bmatrix}
+\sigma^2_{R} & \sigma_{RG} & \sigma_{RB}
+\cr
+\sigma_{RG} & \sigma^2_{G} & \sigma_{GB}
+\cr
+\sigma_{RB} & \sigma_{GB} & \sigma^2_{B}
+\end{bmatrix}
+$$
+
+```{python}
+import numpy as np
+from PIL import Image
+from IPython.display import display
+import warnings
+warnings.filterwarnings("ignore")
+import matplotlib.pyplot as plt
+
+from sklearn.mixture import GaussianMixture as GM
+```
+
+```{python}
+img = Image.open("images/fruits.jpg")
+```
+
+```{python}
+img = img.convert('RGB')
+img2 = np.array(img)
+rows, cols, ch = img2.shape
+img3 = img2.reshape((-1, 3))
+```
+
+```{python}
+results = []
+cov_types = ['full', 'tied', 'spherical', 'diag']
+idx = np.random.choice(len(img3), size = 1000, replace=False)
+```
+
+
+
+```{python}
+for cov_type in cov_types:
+    gmm = GM(n_components=3, covariance_type=cov_type).fit(img3)
+    labels = gmm.predict(img3)
+
+    sample = img3[idx]
+    sample_labels = labels[idx]
+    results.append((cov_type, sample, sample_labels))
+```
+
+```{python}
+#| label: fig-random-data-points
+#| fig-cap: Зурган өгөгдлөөс санаммаргүйгээр сонгосон цэгүүдийн тархалтын график
+plt.style.use('default')
+fig, axes = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={'projection': '3d'})
+axes = axes.ravel()
+
+for ax, (cov_type, sample, sample_labels) in zip(axes, results):
+    ax.scatter(sample[:, 0], sample[:, 1], sample[:, 2], c=sample_labels)
+    ax.set_title(f"Covariance: {cov_type}")
+    ax.set_xlabel("R")
+    ax.set_ylabel("G")
+    ax.set_zlabel("B")
+
+plt.show()
+```
+
+```{python}
+from matplotlib.colors import ListedColormap
+
+segmented_images = []
+colors = ["#000000", "#FFFFFF", "#707070"]
+my_cmap = ListedColormap(colors, name="my3colors")
+cov_types = ['full', 'tied', 'spherical', 'diag']
+
+```
+
+```{python}
+for type in cov_types:
+    gmm = GM(n_components=3, covariance_type=type).fit(img3)
+    labels = gmm.predict(img3)
+
+    colored = my_cmap(labels / labels.max())[:, :3]
+
+    segmented_img = (colored * 255).astype(np.uint8).reshape(rows, cols, 3)
+    final = Image.fromarray(segmented_img)
+    segmented_images.append(final)
+```
+
+
+```{python}
+#| label: fig-segmented-images
+#| fig-cap: Ковариацийн матриц бүрийн төрөлд segment хийсэн зурган өгөгдлийн хувилбарууд.
+plt.style.use('default')
+fig, axes = plt.subplots(2, 2, figsize=(10, 10))
+axes = axes.ravel()
+
+for ax, cov_type, seg_img in zip(axes, cov_types, segmented_images):
+    ax.imshow(seg_img)
+    ax.set_title(f"Covariance: {cov_type}")
+    ax.axis('off')
+
+plt.show()
+```
