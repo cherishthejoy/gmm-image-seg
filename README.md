@@ -9,6 +9,8 @@ pip install -r requirements.txt
 
 ```
 
+Bagshiin file-iig shuud avtsan bolhoor DejeVu Sans Mono font zaaval system wide suulgaj baij bolj bnlee
+
 May or may not need to install the "Quarto" extension unless you use other IDE or text editors.
 
 ## Introduction
