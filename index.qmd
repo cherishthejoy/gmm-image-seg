@@ -4,6 +4,12 @@ title: "Gaussian Mixture Model Image Segmentation"
 subtitle: ""
 abstract: Энэхүү ажлаар өөр хэмжээст бүхий санамсаргүй утгууд дээр хэвийн тархалтыг ашиглан граафик гаргах, тэр дундаас гурван хэмжээст утга бүхий зурган өгөгдөл дээр Гауссын хольцийн моделийг ашиглан сэгмэнтлэн, хангалтгүй үр дүн үзүүлэх тохиолдлуудыг тодорхойлон дүгнэх болно. Мөн тухайн моделийн параметрүүд ямар утгуудад ямар тохиолдолд үр дүн өгөөжтэй байхыг тодорохойлох.
 author: "Team"
+
+bibliography: references.bib
+csl: ieee.csl
+citeproc: true
+link-citations: true
+
 date: "2025-11-06"
 date-format: "YYYY оны M-р сарын D"
 toc: true
@@ -65,11 +71,14 @@ fig-pos: "!ht"
 fig-format: pdf
 fig-cap-location: top
 tbl-cap-location: top
-bibliography: references.bib
-csl: ieee.csl
-citeproc: true
-link-citations: true
+
 ---
+
+```{python}
+#| echo: false
+
+conclusion = list()
+```
 
 # Шаардлагатай багцууд {-}
 
@@ -194,7 +203,7 @@ gmm = GMM(n_components=3, covariance_type="full").fit(X_train)
 ```
 Гурван өөр төрлийн хэвийн тархалттай учир, кластерийн тоог '3' гэж өгнө.
 
-ГХМ нь голлон EM алгоритмийг ашиглан моделийг сургадаг. Алгоритмийн тодорхой үе шатад likelihood утгуудын үржвэр нь өмнөх үржвэрийн утгаас төдийлөн ялагарахгүй бол параметрийн үнэлэлт нь эцэсдээ хүрсэн гэж тооцдог.
+ГХМ нь голлон EM алгоритмийг ашиглан моделийг сургадаг. Алгоритмийн тодорхой үе шатад санамсаргүй утгуудын үржвэр нь өмнөх үржвэрийн утгаас төдийлөн ялагарахгүй бол параметрийн үнэлэлт нь эцэсдээ хүрсэн гэж тооцдог.
 
 $$
 \mathcal{L}(\theta|x_i) = \prod_{i=1}^N f(x_i|\theta)
@@ -453,3 +462,11 @@ Explanation here!
 # What latent-variables? Why latent-variables? When latent-variables?
 
 Explanation here!
+
+
+# Дүгнэлт {.unnumbered}
+
+# Ашигласан материал {.unnumbered}
+
+::: {#refs}
+:::
