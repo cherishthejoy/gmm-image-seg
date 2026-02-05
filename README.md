@@ -2,14 +2,12 @@
 
 ### Clone and install the requirements
 
-venv uusgechvel dajgu bhaa....
-
 ```
 pip install -r requirements.txt
 
 ```
 
-May or not need to the install the "Quarto" extension unless you use other IDE or text editors.
+May or may not need to install the "Quarto" extension unless you use other IDE or text editors.
 
 ## Introduction
 
